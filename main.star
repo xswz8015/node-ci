@@ -125,7 +125,8 @@ luci.gitiles_poller(
 # CQ for master and infra/config
 
 luci.cq(
-    submit_max_burst = 1,
+    # TODO(tandrii): undo submit_max_burst to 1.
+    submit_max_burst = 2,
     submit_burst_delay = 60 * time.second,
     status_host = "chromium-cq-status.appspot.com",
 )
