@@ -190,39 +190,41 @@ DEFAULT_ARGS = {
     "swarming_tags": ["vpython:native-python-wrapper"],
 }
 
-def ci_builder(*, name, properties, **kvargs):
+def ci_builder(*, name, os, properties, **kwargs):
     luci.builder(
         name = name,
         bucket = "ci",
         service_account = CI_ACCOUNT,
+        dimensions = dict(os = os, pool = "luci.node-ci.ci"),
         properties = dict(properties, mastername = "client.node-ci"),
         triggered_by = ["main"],
-        **dict(DEFAULT_ARGS, **kvargs)
+        **dict(DEFAULT_ARGS, **kwargs)
     )
 
-def try_builder(*, name, properties, **kvargs):
+def try_builder(*, name, os, properties, **kwargs):
     luci.builder(
         name = name,
         bucket = "try",
         service_account = TRY_ACCOUNT,
+        dimensions = dict(os = os, pool = "luci.node-ci.try"),
         properties = dict(properties, mastername = "tryserver.node-ci"),
-        **dict(DEFAULT_ARGS, **kvargs)
+        **dict(DEFAULT_ARGS, **kwargs)
     )
 
 def builder_pair(*, ci_name, try_name, os, goma = None, cq = False):
     """Add a CI/trybot pair for a given OS."""
     ci_builder(
         name = ci_name,
+        os = os,
         properties = dict(goma or {}),
-        dimensions = dict(os = os),
         execution_timeout = time.hour,
     )
     luci.console_view_entry(builder = ci_name, console_view = "main")
 
     try_builder(
         name = try_name,
+        os = os,
         properties = dict(goma or {}),
-        dimensions = dict(os = os),
         execution_timeout = time.hour // 2,
     )
     luci.list_view_entry(builder = try_name, list_view = "tryserver")
@@ -260,7 +262,7 @@ builder_pair(
 try_builder(
     name = "node_ci_presubmit",
     executable = recipe("run_presubmit"),
-    dimensions = {"os": "Ubuntu-16.04", "pool": "try"},
+    os = "Ubuntu-16.04",
     properties = {"runhooks": False, "solution_name": "node-ci"},
     execution_timeout = 5 * time.minute,
     priority = 25,
