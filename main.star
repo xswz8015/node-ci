@@ -196,7 +196,7 @@ def ci_builder(*, name, os, properties, **kwargs):
         bucket = "ci",
         service_account = CI_ACCOUNT,
         dimensions = dict(os = os, pool = "luci.node-ci.ci"),
-        properties = dict(properties, mastername = "client.node-ci"),
+        properties = dict(properties, builder_group = "client.node-ci"),
         triggered_by = ["main"],
         **dict(DEFAULT_ARGS, **kwargs)
     )
@@ -207,7 +207,7 @@ def try_builder(*, name, os, properties, **kwargs):
         bucket = "try",
         service_account = TRY_ACCOUNT,
         dimensions = dict(os = os, pool = "luci.node-ci.try"),
-        properties = dict(properties, mastername = "tryserver.node-ci"),
+        properties = dict(properties, builder_group = "tryserver.node-ci"),
         **dict(DEFAULT_ARGS, **kwargs)
     )
 
