@@ -246,7 +246,7 @@ builder_pair(
 builder_pair(
     ci_name = "Node-CI Mac64",
     try_name = "node_ci_mac64_rel",
-    os = "Mac-10.13",
+    os = "Mac",
 )
 
 builder_pair(
