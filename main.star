@@ -176,6 +176,7 @@ def goma_args(*, enable_ats = False):
         "$build/goma": {
             "server_host": "goma.chromium.org",
             "rpc_extra_params": "?prod",
+            "use_luci_auth": True,
         },
     }
     if enable_ats:
