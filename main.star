@@ -300,7 +300,7 @@ def builder_pair(*, ci_name, try_name, os, goma = None, cq = False):
 builder_pair(
     ci_name = "Node-CI Linux64",
     try_name = "node_ci_linux64_rel",
-    os = "Ubuntu-16.04",
+    os = "Ubuntu",
     goma = GOMA_DEFAULT,
     cq = True,
 )
@@ -324,7 +324,7 @@ builder_pair(
 try_builder(
     name = "node_ci_presubmit",
     executable = recipe("run_presubmit"),
-    os = "Ubuntu-16.04",
+    os = "Ubuntu",
     properties = {"runhooks": False, "solution_name": "node-ci"},
     execution_timeout = 5 * time.minute,
     priority = 25,
