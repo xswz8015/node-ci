@@ -191,12 +191,12 @@ luci.cq(
     status_host = "chromium-cq-status.appspot.com",
 )
 
-def cq_group(name, ref):
+def cq_group(name, refs):
     luci.cq_group(
         name = name,
         watch = cq.refset(
             repo = REPO,
-            refs = [ref],
+            refs = refs,
         ),
         acls = [
             acl.entry(
@@ -217,8 +217,8 @@ def cq_group(name, ref):
         ),
     )
 
-cq_group("master", MASTER_REF)
-cq_group("infra_config", "refs/heads/infra/config")
+cq_group("master", [MASTER_REF, "refs/heads/main"])
+cq_group("infra_config", ["refs/heads/infra/config"])
 
 ###############################################################################
 # Helpers
