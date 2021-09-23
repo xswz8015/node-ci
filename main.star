@@ -154,7 +154,7 @@ luci.bucket(
 REPO = "https://chromium.googlesource.com/v8/node-ci"
 V8_ICON = "https://storage.googleapis.com/chrome-infra-public/logo/v8.ico"
 V8_LOGO = "https://storage.googleapis.com/chrome-infra-public/logo/v8.svg"
-MASTER_REF = "refs/heads/master"
+MAIN_REF = "refs/heads/main"
 
 luci.milo(logo = V8_LOGO)
 
@@ -162,7 +162,7 @@ luci.console_view(
     name = "main",
     title = "Main",
     repo = REPO,
-    refs = [MASTER_REF],
+    refs = [MAIN_REF],
     favicon = V8_ICON,
 )
 
@@ -179,11 +179,11 @@ luci.gitiles_poller(
     name = "main",
     bucket = "ci",
     repo = REPO,
-    refs = [MASTER_REF],
+    refs = [MAIN_REF],
 )
 
 ###############################################################################
-# CQ for master and infra/config
+# CQ for main and infra/config
 
 luci.cq(
     submit_max_burst = 1,
@@ -217,7 +217,7 @@ def cq_group(name, refs):
         ),
     )
 
-cq_group("master", [MASTER_REF, "refs/heads/main"])
+cq_group("main", [MAIN_REF])
 cq_group("infra_config", ["refs/heads/infra/config"])
 
 ###############################################################################
@@ -229,7 +229,7 @@ def recipe(name):
     return luci.recipe(
         name = name,
         cipd_package = BUILD,
-        cipd_version = MASTER_REF,
+        cipd_version = MAIN_REF,
     )
 
 def goma_args(*, enable_ats = False):
@@ -292,7 +292,7 @@ def builder_pair(*, ci_name, try_name, os, goma = None, cq = False):
     luci.list_view_entry(builder = try_name, list_view = "tryserver")
 
     if cq:
-        luci.cq_tryjob_verifier(builder = try_name, cq_group = "master")
+        luci.cq_tryjob_verifier(builder = try_name, cq_group = "main")
 
 ###############################################################################
 # Standard builders
@@ -332,7 +332,7 @@ try_builder(
 
 luci.cq_tryjob_verifier(
     builder = "node_ci_presubmit",
-    cq_group = "master",
+    cq_group = "main",
     disable_reuse = True,
 )
 luci.cq_tryjob_verifier(
