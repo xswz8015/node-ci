@@ -148,6 +148,12 @@ luci.bucket(
     ],
 )
 
+luci.binding(
+    realm = "@root",
+    roles = "role/configs.validator",
+    users = TRY_ACCOUNT,
+)
+
 ###############################################################################
 # Milo: CI and Tryserver
 
