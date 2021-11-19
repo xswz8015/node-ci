@@ -1,9 +1,6 @@
 #!/usr/bin/env lucicfg
 
-lucicfg.check_version("1.23.3", "Please update depot_tools")
-
-# Enable LUCI Realms support.
-lucicfg.enable_experiment("crbug.com/1085650")
+lucicfg.check_version("1.30.4", "Please update depot_tools")
 
 # Launch 100% of Swarming tasks for builds in "realms-aware mode"
 luci.builder.defaults.experiments.set({"luci.use_realms": 100})
@@ -279,12 +276,12 @@ def try_builder(*, name, os, properties, **kwargs):
         **dict(DEFAULT_ARGS, **kwargs)
     )
 
-def builder_pair(*, ci_name, try_name, os, goma = None, cq = False):
+def builder_pair(*, ci_name, try_name, os, goma = None, cq = False, is_debug = False):
     """Add a CI/trybot pair for a given OS."""
     ci_builder(
         name = ci_name,
         os = os,
-        properties = dict(goma or {}),
+        properties = dict(goma or {}, is_debug = is_debug),
         execution_timeout = time.hour,
     )
     luci.console_view_entry(builder = ci_name, console_view = "main")
@@ -292,7 +289,7 @@ def builder_pair(*, ci_name, try_name, os, goma = None, cq = False):
     try_builder(
         name = try_name,
         os = os,
-        properties = dict(goma or {}),
+        properties = dict(goma or {}, is_debug = is_debug),
         execution_timeout = time.hour // 2,
     )
     luci.list_view_entry(builder = try_name, list_view = "tryserver")
@@ -309,6 +306,13 @@ builder_pair(
     os = "Ubuntu",
     goma = GOMA_DEFAULT,
     cq = True,
+)
+
+builder_pair(
+    ci_name = "Node-CI Linux64 - debug",
+    try_name = "node_ci_linux64_dbg",
+    os = "Ubuntu",
+    goma = GOMA_DEFAULT,
 )
 
 builder_pair(
