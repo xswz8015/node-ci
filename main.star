@@ -313,6 +313,7 @@ builder_pair(
     try_name = "node_ci_linux64_dbg",
     os = "Ubuntu",
     goma = GOMA_DEFAULT,
+    is_debug = True,
 )
 
 builder_pair(
