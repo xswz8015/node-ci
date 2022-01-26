@@ -233,6 +233,7 @@ def recipe(name):
         name = name,
         cipd_package = BUILD,
         cipd_version = MAIN_REF,
+        use_bbagent = True,
     )
 
 def goma_args(*, enable_ats = False):
