@@ -229,15 +229,12 @@ cq_group("infra_config", ["refs/heads/infra/config"])
 BUILD = "infra/recipe_bundles/chromium.googlesource.com/chromium/tools/build"
 
 def recipe(name):
-    use_python3 = name in [
-        "run_presubmit",
-    ]
     return luci.recipe(
         name = name,
         cipd_package = BUILD,
         cipd_version = MAIN_REF,
         use_bbagent = True,
-        use_python3 = use_python3,
+        use_python3 = True,
     )
 
 def goma_args(*, enable_ats = False):
