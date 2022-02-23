@@ -5,6 +5,15 @@ lucicfg.check_version("1.30.9", "Please update depot_tools")
 # Use LUCI Scheduler BBv2 names and add Scheduler realms configs.
 lucicfg.enable_experiment("crbug.com/1182002")
 
+luci.builder.defaults.experiments.set(
+    {
+        # Use python3 in recipes for all builds.
+        "luci.recipes.use_python3": 100,
+        # Use python3 in steps for all builds.
+        "v8.steps.use_python3": 100,
+    },
+)
+
 lucicfg.config(
     config_dir = "generated",
     tracked_files = [
